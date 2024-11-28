@@ -1,4 +1,4 @@
-package com.p3openclassrooms.p3oc.model;
+package com.p3openclassrooms.p3oc.models;
 
 import java.sql.Timestamp;
 
