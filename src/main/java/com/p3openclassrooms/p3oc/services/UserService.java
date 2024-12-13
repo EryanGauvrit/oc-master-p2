@@ -1,4 +1,4 @@
-package com.p3openclassrooms.p3oc.services.user;
+package com.p3openclassrooms.p3oc.services;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -6,6 +6,7 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
+import com.p3openclassrooms.p3oc.dto.UserMe;
 import com.p3openclassrooms.p3oc.models.User;
 import com.p3openclassrooms.p3oc.repositories.UserRepository;
 
@@ -29,6 +30,10 @@ public class UserService {
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public UserMe getMeByEmail(String email) {
+        return userRepository.getUserMeByEmail(email);
     }
 
     public User getById(Long id) {
