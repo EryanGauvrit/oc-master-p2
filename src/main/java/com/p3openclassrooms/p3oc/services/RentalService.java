@@ -31,6 +31,10 @@ public class RentalService {
         return rentalRepository.findByIdWithoutInclude(id);
     }
 
+    public Rental findById(Long id) {
+        return rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+    }
+
     public List<RentalWithoutInclude> getAll() {
         return rentalRepository.findAllByOrderByIdDesc();
     }
