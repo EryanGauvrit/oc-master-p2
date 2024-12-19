@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.p3openclassrooms.p3oc.dto.RentalWithoutInclude;
 import com.p3openclassrooms.p3oc.models.Rental;
 import com.p3openclassrooms.p3oc.repositories.RentalRepository;
 
@@ -26,12 +27,12 @@ public class RentalService {
         return rentalRepository.save(rental);
     }
 
-    public Rental getById(Long id) {
-        return rentalRepository.findById(id).orElse(null);
+    public RentalWithoutInclude getById(Long id) {
+        return rentalRepository.findByIdWithoutInclude(id);
     }
 
-    public List<Rental> getAll() {
-        return rentalRepository.findAll();
+    public List<RentalWithoutInclude> getAll() {
+        return rentalRepository.findAllByOrderByIdDesc();
     }
 
     public Rental update(Long id, Rental rental) {

@@ -36,8 +36,8 @@ public class UserService {
         return userRepository.getUserMeByEmail(email);
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public UserMe getById(Long id) {
+        return userRepository.getUserById(id);
     }
 
     public User update(Long id, User user) {

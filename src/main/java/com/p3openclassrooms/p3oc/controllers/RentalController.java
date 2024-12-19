@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
+import com.p3openclassrooms.p3oc.dto.RentalWithoutInclude;
 import com.p3openclassrooms.p3oc.models.Rental;
 import com.p3openclassrooms.p3oc.services.FileService;
 import com.p3openclassrooms.p3oc.services.RentalService;
@@ -35,12 +35,15 @@ public class RentalController {
     private final FileService fileService;
 
     @GetMapping("/rentals")
-    public List<Rental> getRentals() {
-        return rentalService.getAll();
+    public Map<String, List<RentalWithoutInclude>> getRentals() {
+        List<RentalWithoutInclude> rentals = rentalService.getAll();
+        Map<String, List<RentalWithoutInclude>> response = new HashMap<>();
+        response.put("rentals", rentals);
+        return response;
     }
 
     @GetMapping("/rentals/{id}")
-    public Rental getRental(@PathVariable Long id) {
+    public RentalWithoutInclude getRental(@PathVariable Long id) {
         return rentalService.getById(id);
     }
     
@@ -73,7 +76,19 @@ public class RentalController {
     }
 
     @PutMapping("/rentals/{id}")
-    public Map<String, String> updateRental(@PathVariable Long id, @RequestBody Rental rental) {
+    public Map<String, String> updateRental(
+        @PathVariable Long id, 
+        @RequestPart("name") String name, 
+        @RequestPart("surface") String surface, 
+        @RequestPart("price") String price, 
+        @RequestPart("description") String description, 
+        @RequestHeader("Authorization") String token
+    ){
+        Rental rental = new Rental();
+        rental.setName(name);
+        rental.setSurface(Float.parseFloat(surface));
+        rental.setPrice(Float.parseFloat(price));
+        rental.setDescription(description);
         rentalService.update(id, rental);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Rental updated !");
