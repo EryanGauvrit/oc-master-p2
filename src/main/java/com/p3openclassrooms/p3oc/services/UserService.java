@@ -1,4 +1,4 @@
-package com.p3openclassrooms.p3oc.services.user;
+package com.p3openclassrooms.p3oc.services;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -6,6 +6,7 @@ import java.time.Instant;
 import org.springframework.stereotype.Service;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
+import com.p3openclassrooms.p3oc.dto.UserMe;
 import com.p3openclassrooms.p3oc.models.User;
 import com.p3openclassrooms.p3oc.repositories.UserRepository;
 
@@ -31,8 +32,16 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserMe getMeByEmail(String email) {
+        return userRepository.getUserMeByEmail(email);
+    }
+
+    public UserMe getById(Long id) {
+        return userRepository.getUserById(id);
     }
 
     public User update(Long id, User user) {
