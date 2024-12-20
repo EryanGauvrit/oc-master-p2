@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
-import com.p3openclassrooms.p3oc.dto.UserMe;
 import com.p3openclassrooms.p3oc.models.User;
 import com.p3openclassrooms.p3oc.services.JWTService;
 import com.p3openclassrooms.p3oc.services.UserService;
@@ -57,12 +56,11 @@ public class AuthController {
     }
     
     @GetMapping("/me")
-    public UserMe getUserAuth(@RequestHeader("Authorization") String token) {
+    public User getUserAuth(@RequestHeader("Authorization") String token) {
         // remove Bearer
         token = token.substring(7);
         String email = springSecurityConfig.jwtDecoder().decode(token).getSubject();
-        UserMe user = userService.getMeByEmail(email);
-        return user;
+        return userService.getByEmail(email);
     }
     
 }

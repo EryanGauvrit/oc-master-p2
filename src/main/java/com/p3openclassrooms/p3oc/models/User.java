@@ -3,6 +3,8 @@ package com.p3openclassrooms.p3oc.models;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"rentals"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

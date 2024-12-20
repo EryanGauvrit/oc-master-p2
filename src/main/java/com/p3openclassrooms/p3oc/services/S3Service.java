@@ -44,7 +44,7 @@ public class S3Service {
                                                                 .key(key)
                                                                 .build();
             s3Client.putObject(objectRequest, RequestBody.fromFile(tempFile));
-            // Files.delete(tempFile);
+            Files.delete(tempFile);
             return getPublicUrl(key);
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload file", e);
