@@ -6,9 +6,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.annotation.PostConstruct;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -20,14 +22,23 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Service
 public class S3Service {
 
-    final String bucketName = "openclassrooms-p2-rental-picture";
-    final S3Client s3Client = s3Client();
+    @Value("${aws.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${aws.secretAccessKey}")
+    private String secretAccessKey;
+
+    @Value("${aws.region}")
+    private String region;
+
+    private final String bucketName = "openclassrooms-p2-rental-picture";
+    private S3Client s3Client;
     
-    private static S3Client s3Client() {
-        Region region = Region.EU_WEST_3;   
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create("AKIAQUFLQQSZCKU2NP4F", "GFk2Cn0T47h8JlS7+LY3405LGyRrIBHdq+du4sVO");
-        return S3Client.builder()
-                       .region(region)
+    @PostConstruct
+    public void init() {
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
+        this.s3Client = S3Client.builder()
+                       .region(Region.of(region))
                        .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                        .httpClient(ApacheHttpClient.builder().build())
                        .build();
