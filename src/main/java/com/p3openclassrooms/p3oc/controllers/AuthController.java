@@ -3,6 +3,7 @@ package com.p3openclassrooms.p3oc.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,11 +32,11 @@ public class AuthController {
     public Map<String, String> getToken(@RequestBody User user) {
         User userFound = userService.getByEmail(user.getEmail());
         if (userFound == null) {
-            throw new RuntimeException("User not found");
+            throw new BadCredentialsException("User not found");
         }
         // password check
         if (!springSecurityConfig.passwordEncoder().matches(user.getPassword(), userFound.getPassword())) {
-            throw new RuntimeException("Password not match");
+            throw new BadCredentialsException("Password not match");
         }
         String token = jwtService.generateToken(userFound.getEmail());
         Map<String, String> response = new HashMap<>();

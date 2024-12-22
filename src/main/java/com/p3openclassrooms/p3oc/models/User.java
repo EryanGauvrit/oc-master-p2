@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"rentals"})
+@JsonIgnoreProperties({"rentals", "messages"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

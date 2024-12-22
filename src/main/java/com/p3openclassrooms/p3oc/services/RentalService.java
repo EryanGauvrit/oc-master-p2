@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.p3openclassrooms.p3oc.models.Rental;
 import com.p3openclassrooms.p3oc.repositories.RentalRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -27,7 +28,7 @@ public class RentalService {
     }
 
     public Rental findById(Long id) {
-        return rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+        return rentalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rental not found"));
     }
 
     public List<Rental> getAll() {
@@ -37,7 +38,7 @@ public class RentalService {
     public Rental update(Long id, Rental rental) {
         Instant now = Instant.now();
         Timestamp timestamp = Timestamp.from(now);
-        Rental rentalToUpdate = rentalRepository.findById(id).orElseThrow(() -> new RuntimeException("Rental not found"));
+        Rental rentalToUpdate = rentalRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Rental not found"));
 
         rentalToUpdate.setUpdated_at(timestamp);
         rentalToUpdate.setName(rental.getName());
