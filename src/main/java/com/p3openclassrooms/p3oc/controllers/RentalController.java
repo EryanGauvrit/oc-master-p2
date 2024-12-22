@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
-import com.p3openclassrooms.p3oc.dto.RentalWithoutInclude;
 import com.p3openclassrooms.p3oc.models.Rental;
 import com.p3openclassrooms.p3oc.services.FileService;
 import com.p3openclassrooms.p3oc.services.RentalService;
@@ -35,16 +34,16 @@ public class RentalController {
     private final FileService fileService;
 
     @GetMapping("/rentals")
-    public Map<String, List<RentalWithoutInclude>> getRentals() {
-        List<RentalWithoutInclude> rentals = rentalService.getAll();
-        Map<String, List<RentalWithoutInclude>> response = new HashMap<>();
+    public Map<String, List<Rental>> getRentals() {
+        List<Rental> rentals = rentalService.getAll();
+        Map<String, List<Rental>> response = new HashMap<>();
         response.put("rentals", rentals);
         return response;
     }
 
     @GetMapping("/rentals/{id}")
-    public RentalWithoutInclude getRental(@PathVariable Long id) {
-        return rentalService.getById(id);
+    public Rental getRental(@PathVariable Long id) {
+        return rentalService.findById(id);
     }
     
     @PostMapping(value = "/rentals", consumes = "multipart/form-data")

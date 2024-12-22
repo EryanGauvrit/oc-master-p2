@@ -3,6 +3,7 @@ package com.p3openclassrooms.p3oc.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.p3openclassrooms.p3oc.configuration.SpringSecurityConfig;
-import com.p3openclassrooms.p3oc.dto.UserMe;
 import com.p3openclassrooms.p3oc.models.User;
 import com.p3openclassrooms.p3oc.services.JWTService;
 import com.p3openclassrooms.p3oc.services.UserService;
@@ -32,11 +32,11 @@ public class AuthController {
     public Map<String, String> getToken(@RequestBody User user) {
         User userFound = userService.getByEmail(user.getEmail());
         if (userFound == null) {
-            throw new RuntimeException("User not found");
+            throw new BadCredentialsException("User not found");
         }
         // password check
         if (!springSecurityConfig.passwordEncoder().matches(user.getPassword(), userFound.getPassword())) {
-            throw new RuntimeException("Password not match");
+            throw new BadCredentialsException("Password not match");
         }
         String token = jwtService.generateToken(userFound.getEmail());
         Map<String, String> response = new HashMap<>();
@@ -57,12 +57,11 @@ public class AuthController {
     }
     
     @GetMapping("/me")
-    public UserMe getUserAuth(@RequestHeader("Authorization") String token) {
+    public User getUserAuth(@RequestHeader("Authorization") String token) {
         // remove Bearer
         token = token.substring(7);
         String email = springSecurityConfig.jwtDecoder().decode(token).getSubject();
-        UserMe user = userService.getMeByEmail(email);
-        return user;
+        return userService.getByEmail(email);
     }
     
 }

@@ -21,7 +21,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/messages")
-    public Map<String, String>  sendMessage(@RequestBody MessageRequestBody message) {
+    public Map<String, String> sendMessage(@RequestBody MessageRequestBody message) {
         messageService.create(message.getMessage(), message.getUser_id(), message.getRental_id());
         
         Map<String, String> response = new HashMap<>();

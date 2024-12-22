@@ -16,10 +16,10 @@ public class FileService {
 
     public String uploadFile(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new RuntimeException("File is empty !");
+            throw new IllegalArgumentException("File is empty !");
         }
         if (!allowedMimeTypes.contains(file.getContentType())) {
-            throw new RuntimeException("File type not allowed !");
+            throw new IllegalArgumentException("File type not allowed !");
         }
         
         return s3Service.uploadFile(file);
