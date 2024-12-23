@@ -16,6 +16,7 @@ import com.p3openclassrooms.p3oc.models.User;
 import com.p3openclassrooms.p3oc.services.JWTService;
 import com.p3openclassrooms.p3oc.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 
 
@@ -28,6 +29,7 @@ public class AuthController {
     private final UserService userService;
     private final SpringSecurityConfig springSecurityConfig;
 
+    @Operation(summary = "User login")
     @PostMapping("/login")  
     public Map<String, String> getToken(@RequestBody User user) {
         User userFound = userService.getByEmail(user.getEmail());
